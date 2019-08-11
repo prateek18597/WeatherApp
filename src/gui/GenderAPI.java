@@ -4,8 +4,11 @@
  */
 package gui;
 
+import entity.Record;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import util.FileUtil;
 import util.GenderizeClient;
 import util.MenuUtil;
 
@@ -192,8 +195,10 @@ public class GenderAPI extends javax.swing.JFrame {
 
     private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
         // TODO add your handling code here:
-        MenuUtil.WeatherAPI();
-        this.dispose();
+        if(Record.purchased || Record.usageCount <= 10){
+            MenuUtil.WeatherAPI();
+            this.dispose();
+        }
     }//GEN-LAST:event_jMenu5MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -210,15 +215,22 @@ public class GenderAPI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String firstName = jTextField1.getText().trim();
-        String lastName = jTextField2.getText().trim();
-        String gender = "Not able to determine gender.";
-        try {
-            gender = GenderizeClient.call(firstName, lastName);
-        } catch (Exception ex) {
-            Logger.getLogger(GenderAPI.class.getName()).log(Level.SEVERE, null, ex);
+        if(Record.purchased || Record.usageCount <= 10){
+            String firstName = jTextField1.getText().trim();
+            String lastName = jTextField2.getText().trim();
+            String gender = "Not able to determine gender.";
+            try {
+                gender = GenderizeClient.call(firstName, lastName);
+                FileUtil.incrementUsage();
+            } catch (Exception ex) {
+                Logger.getLogger(GenderAPI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jTextArea1.setText("Gender:" + gender);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Trial Version Expired.");
+            MenuUtil.Home();
+            this.dispose();
         }
-        jTextArea1.setText("Gender:" + gender);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

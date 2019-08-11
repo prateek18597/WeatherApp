@@ -4,7 +4,20 @@
  */
 package gui;
 
-import util.MenuUtil;
+import entity.Content;
+import entity.Record;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileSystemView;
+import util.*;
 
 /**
  *
@@ -43,6 +56,11 @@ public class Home extends javax.swing.JFrame {
         jMenu4.setText("jMenu4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
@@ -53,6 +71,11 @@ public class Home extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton1.setText("Purchase");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jMenuBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -102,17 +125,47 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+      
     private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
         // TODO add your handling code here:
-        MenuUtil.WeatherAPI();
-        this.dispose();
+        if(Record.purchased || Record.usageCount <= 10){
+            MenuUtil.WeatherAPI();
+            this.dispose();
+        }
     }//GEN-LAST:event_jMenu5MouseClicked
 
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
         // TODO add your handling code here:
-        MenuUtil.GenderAPI();
-        this.dispose();
+        if(Record.purchased || Record.usageCount <= 10){
+            MenuUtil.GenderAPI();
+            this.dispose();
+        }
     }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        try {
+            // TODO add your handling code here:
+            FileUtil.getContent();
+            if(Record.purchased){
+                jTextArea1.setVisible(!Record.purchased);
+                jButton1.setVisible(!Record.purchased);
+            } else {
+                if(Record.usageCount <= 10) {
+                    jTextArea1.setText(Content.freeVersion);
+                } else {
+                    jTextArea1.setText(Content.buyNow);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Contact on pratik18597@gmail.com!");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

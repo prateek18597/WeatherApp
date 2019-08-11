@@ -4,10 +4,13 @@
  */
 package gui;
 
+import entity.Record;
 import entity.WeatherInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import util.ApixuClient;
+import util.FileUtil;
 import util.GenderizeClient;
 import util.MenuUtil;
 
@@ -194,8 +197,10 @@ public class WeatherAPI extends javax.swing.JFrame {
 
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
         // TODO add your handling code here:
-        MenuUtil.GenderAPI();
-        this.dispose();
+        if(Record.purchased || Record.usageCount <= 10){
+            MenuUtil.GenderAPI();
+            this.dispose();
+        }
     }//GEN-LAST:event_jMenu2MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -212,13 +217,20 @@ public class WeatherAPI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String city = jTextField1.getText().trim();
-        String country = jTextField2.getText().trim();
-        try {
-            WeatherInfo weatherInfo = ApixuClient.call(city, country);
-            jTextArea1.setText(weatherInfo.toString());
-        } catch (Exception ex) {
-            Logger.getLogger(WeatherAPI.class.getName()).log(Level.SEVERE, null, ex);
+        if(Record.purchased || Record.usageCount <= 10){
+            String city = jTextField1.getText().trim();
+            String country = jTextField2.getText().trim();
+            try {
+                WeatherInfo weatherInfo = ApixuClient.call(city, country);
+                FileUtil.incrementUsage();
+                jTextArea1.setText(weatherInfo.toString());
+            } catch (Exception ex) {
+                Logger.getLogger(WeatherAPI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Trial Version Expired.");
+            MenuUtil.Home();
+            this.dispose();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
