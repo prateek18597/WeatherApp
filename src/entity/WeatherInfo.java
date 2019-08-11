@@ -19,4 +19,12 @@ public class WeatherInfo {
     private String countryName;
     private String condition;
     private Double tempC;
+    
+    @Override
+    public String toString() {
+        return "City: " + cityName +
+               "\nCountry: " + countryName +
+               "\nCondition: " + condition +
+               "\nTemperature: " + tempC;
+    }
 }

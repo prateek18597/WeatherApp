@@ -9,8 +9,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import entity.WeatherInfo;
 import org.springframework.web.client.RestTemplate;
-import static util.GenderizeClient.extractGender;
-import static util.GenderizeClient.validate;
 
 /**
  *

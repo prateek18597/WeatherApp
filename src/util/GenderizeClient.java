@@ -17,26 +17,6 @@ import entity.Gender;
  */
 public class GenderizeClient {
     
-    public static Boolean validate(String gender) {
-        Class<?> objClass = Gender.class.getClass();
-
-        Field[] fields = objClass.getFields();
-        for(Field field : fields) {
-            String name = field.getName();
-            Object value = null;
-            try {
-                value = field.get(null);
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(GenderizeClient.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(GenderizeClient.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println(name + ": " + value.toString());
-        }
-          return null;
-    }
-    
-    
     public static String extractGender(String response) {
         JsonParser parser = new JsonParser();
         JsonElement jsonElement = parser.parse(response);
@@ -50,7 +30,9 @@ public class GenderizeClient {
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject("http://api.namsor.com/onomastics/api/json/gender/" + firstName + "/" + lastName,String.class);
         String gender = extractGender(result);
-        System.out.println(validate(gender));
-        return null;
+        if (gender.equals(Gender.MALE))
+            return Gender.MALE;
+        else 
+            return Gender.FEMALE;
     }
 }
