@@ -4,6 +4,11 @@
  */
 package gui;
 
+import entity.WeatherInfo;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.ApixuClient;
+import util.GenderizeClient;
 import util.MenuUtil;
 
 /**
@@ -89,10 +94,25 @@ public class WeatherAPI extends javax.swing.JFrame {
         );
 
         jButton1.setText("Check Weather");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Clear");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Close");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -177,6 +197,30 @@ public class WeatherAPI extends javax.swing.JFrame {
         MenuUtil.GenderAPI();
         this.dispose();
     }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        jTextArea1.setText(null);
+        jTextField1.setText(null);
+        jTextField2.setText(null);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String city = jTextField1.getText().trim();
+        String country = jTextField2.getText().trim();
+        try {
+            WeatherInfo weatherInfo = ApixuClient.call(city, country);
+            jTextArea1.setText(weatherInfo.toString());
+        } catch (Exception ex) {
+            Logger.getLogger(WeatherAPI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
