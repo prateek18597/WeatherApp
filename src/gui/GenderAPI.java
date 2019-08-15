@@ -228,6 +228,7 @@ public class GenderAPI extends javax.swing.JFrame {
             jTextArea1.setText("Gender:" + gender);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Trial Version Expired.");
+            
             MenuUtil.Home();
             this.dispose();
         }
